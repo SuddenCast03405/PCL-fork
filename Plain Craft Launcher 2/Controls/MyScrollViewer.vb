@@ -18,6 +18,7 @@ Public Class MyScrollViewer
         End If
         e.Handled = True
         PerformVerticalOffsetDelta(-e.Delta)
+        Application.ShowingTooltips.ForEach(Sub(tooltip) AniStart(AaOpacity(tooltip, -1, 100), "Hide Tooltip " & GetUuid()))
     End Sub
     Public Sub PerformVerticalOffsetDelta(Delta As Double)
         AniStart(
