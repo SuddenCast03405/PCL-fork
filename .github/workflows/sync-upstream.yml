@@ -1,0 +1,74 @@
+name: Sync upstream official release
+
+on:
+  schedule:
+    - cron: '23 */6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-upstream
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Find latest upstream official release
+        id: upstream
+        run: |
+          set -euo pipefail
+          git remote add upstream https://github.com/Meloong-Git/PCL.git
+          git fetch --no-tags upstream main
+          line=$(git log upstream/main --format='%H %s' | grep -m 1 -E '^[0-9a-f]+ [0-9]+(\.[0-9]+)+ 正式版$' || true)
+          if [ -z "$line" ]; then
+            echo "::error::No official release commit found on upstream/main."
+            exit 1
+          fi
+          sha=${line%% *}
+          subject=${line#* }
+          echo "sha=$sha" >> "$GITHUB_OUTPUT"
+          echo "subject=$subject" >> "$GITHUB_OUTPUT"
+          echo "Latest upstream official release: $subject ($sha)"
+
+      - name: Merge upstream release
+        id: merge
+        run: |
+          set -euo pipefail
+          sha="${{ steps.upstream.outputs.sha }}"
+          if git merge-base --is-ancestor "$sha" HEAD; then
+            echo "Already up to date with ${{ steps.upstream.outputs.subject }}."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          if ! git merge --no-edit "$sha"; then
+            echo "::error::Merge conflict while syncing ${{ steps.upstream.outputs.subject }}. Resolve manually."
+            exit 1
+          fi
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      - name: Verify local changes survived the merge
+        if: steps.merge.outputs.changed == 'true'
+        run: |
+          set -euo pipefail
+          grep -q 'RestrictMcDownload As Boolean = False' 'Plain Craft Launcher 2/Modules/ModSecret.vb'
+          test -f 'Plain Craft Launcher 2/Modules/ModChinaConsent.vb'
+          test -f 'Plain Craft Launcher 2/Controls/MyMsg/MyChinaConsentWindow.xaml'
+          grep -q 'IsMainlandChina()' 'Plain Craft Launcher 2/Application.xaml.vb'
+
+      - name: Push
+        if: steps.merge.outputs.changed == 'true'
+        run: git push origin HEAD:main
