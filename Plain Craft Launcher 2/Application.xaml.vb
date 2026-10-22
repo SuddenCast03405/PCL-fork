@@ -130,6 +130,12 @@ RetryCacheCheck:
                 MyMsgBox("PCL 和新版 Minecraft 均不再支持 32 位系统，请重装为 64 位系统后再进行游戏！", "环境警告", "我知道了", IsWarn:=True, ForceWait:=True)
                 FormMain.EndProgramForce(ProcessReturnValues.Cancel)
             End If
+            '中国大陆地区的启动确认
+            If IsMainlandChina() Then
+                Dim ConsentWindow As New MyChinaConsentWindow
+                ConsentWindow.ShowDialog()
+                If Not ConsentWindow.Accepted Then FormMain.EndProgramForce(ProcessReturnValues.Cancel)
+            End If
             '计时
             Logger.Info($"第一阶段加载用时：{GetTimeMs() - ApplicationStartTick} ms")
             ApplicationStartTick = GetTimeMs()

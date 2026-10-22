@@ -238,6 +238,9 @@
       <DependentUpon>MyLoading.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\MyMenuItem.vb" />
+    <Compile Include="Controls\MyMsg\MyChinaConsentWindow.xaml.vb">
+      <DependentUpon>MyChinaConsentWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\MyMsg\MyMsgInput.xaml.vb">
       <DependentUpon>MyMsgInput.xaml</DependentUpon>
     </Compile>
@@ -257,6 +260,7 @@
     <Compile Include="Modules\ModDevelop.vb" />
     <Compile Include="Modules\Minecraft\ModWatcher.vb" />
     <Compile Include="Modules\ModSecret.vb" />
+    <Compile Include="Modules\ModChinaConsent.vb" />
     <Compile Include="Pages\PageDownload\Resource\PageResource.xaml.vb">
       <DependentUpon>PageResource.xaml</DependentUpon>
     </Compile>
@@ -423,6 +427,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\MyLoading.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\MyMsg\MyChinaConsentWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
