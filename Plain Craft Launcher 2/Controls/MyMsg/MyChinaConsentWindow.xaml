@@ -1,42 +1,25 @@
 <Window x:Class="MyChinaConsentWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:my="clr-namespace:PCL"
         Title="使用前确认"
-        Width="520" SizeToContent="Height"
+        Width="480" SizeToContent="Height"
         WindowStartupLocation="CenterScreen"
-        WindowStyle="None" ResizeMode="NoResize"
-        ShowInTaskbar="False" Topmost="True"
-        Background="#FBFBFB"
-        FontFamily="Microsoft YaHei UI"
+        ResizeMode="NoResize"
+        Background="#F7F7F7"
+        FontFamily="Microsoft YaHei UI" FontSize="13"
         UseLayoutRounding="True" SnapsToDevicePixels="True">
-    <Border BorderBrush="#22000000" BorderThickness="1">
-        <Grid Margin="26,22,26,22">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="2" />
-                <RowDefinition Height="14" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="18" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="10" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="24" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-            <TextBlock Grid.Row="0" Text="使用前确认" FontSize="23" Foreground="{DynamicResource ColorBrush2}" />
-            <Rectangle Grid.Row="1" Height="2" Fill="{DynamicResource ColorBrush2}" />
-            <TextBlock Grid.Row="3" FontSize="15" LineHeight="22" TextWrapping="Wrap" Foreground="#FF5C5C5C"
-                       Text="本软件为 PCL 的第三方修改版本，与 Mojang Studios 及 PCL 官方无关。&#xa;&#xa;根据你所在地区的要求，使用本软件前需要确认：你已年满 22 周岁，并已阅读、理解并同意 Minecraft 最终用户许可协议（EULA）。若你不同意，请退出本软件。" />
-            <my:MyCheckBox Grid.Row="5" x:Name="CheckConsent" Text="我已年满 22 周岁，并同意 Minecraft EULA。" />
-            <TextBlock Grid.Row="7" FontSize="13" Foreground="#FF5C5C5C">
-                <Hyperlink x:Name="LinkEula" RequestNavigate="LinkEula_RequestNavigate"
-                           Foreground="{DynamicResource ColorBrush3}">查看 Minecraft 最终用户许可协议（EULA）</Hyperlink>
-            </TextBlock>
-            <StackPanel Grid.Row="9" Orientation="Horizontal" HorizontalAlignment="Right">
-                <my:MyButton x:Name="BtnExit" Text="退出 PCL" ColorType="Normal" Margin="0,0,12,0" Padding="12,7" />
-                <my:MyButton x:Name="BtnContinue" Text="同意并继续" ColorType="Highlight" IsEnabled="False" Padding="12,7" />
-            </StackPanel>
-        </Grid>
-    </Border>
+    <StackPanel Margin="24">
+        <TextBlock Text="使用前确认" FontSize="20" FontWeight="SemiBold" />
+        <TextBlock Margin="0,12,0,0" TextWrapping="Wrap" Foreground="#555555"
+                   Text="本软件为 PCL 的第三方修改版本，与 Mojang Studios 及 PCL 官方无关。&#xa;&#xa;请确认以下两项后继续使用。若不同意，请退出本软件。" />
+        <CheckBox x:Name="CheckAge" Margin="0,20,0,0" Content="我已年满 22 周岁" />
+        <CheckBox x:Name="CheckEula" Margin="0,12,0,0" Content="我已阅读并同意 Minecraft 最终用户许可协议（EULA）" />
+        <TextBlock Margin="24,6,0,0" FontSize="12">
+            <Hyperlink x:Name="LinkEula" RequestNavigate="LinkEula_RequestNavigate">查看 Minecraft EULA</Hyperlink>
+        </TextBlock>
+        <StackPanel Margin="0,24,0,0" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button x:Name="BtnExit" Content="退出 PCL" MinWidth="88" Height="30" Margin="0,0,10,0" IsCancel="True" />
+            <Button x:Name="BtnContinue" Content="同意并继续" MinWidth="96" Height="30" IsDefault="True" IsEnabled="False" />
+        </StackPanel>
+    </StackPanel>
 </Window>

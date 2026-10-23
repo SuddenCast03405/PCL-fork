@@ -8,28 +8,23 @@ Public Class MyChinaConsentWindow
         InitializeComponent()
     End Sub
 
-    Private Sub CheckConsent_Change(sender As Object, user As Boolean) Handles CheckConsent.Change
-        BtnContinue.IsEnabled = CheckConsent.Checked
+    Private Sub Consent_Changed(sender As Object, e As RoutedEventArgs) Handles CheckAge.Checked, CheckAge.Unchecked, CheckEula.Checked, CheckEula.Unchecked
+        BtnContinue.IsEnabled = CheckAge.IsChecked = True AndAlso CheckEula.IsChecked = True
     End Sub
 
-    Private Sub BtnContinue_Click(sender As Object, e As MouseButtonEventArgs) Handles BtnContinue.Click
-        If Not CheckConsent.Checked Then Return
+    Private Sub BtnContinue_Click(sender As Object, e As RoutedEventArgs) Handles BtnContinue.Click
+        If CheckAge.IsChecked <> True OrElse CheckEula.IsChecked <> True Then Return
         Accepted = True
         Close()
     End Sub
 
-    Private Sub BtnExit_Click(sender As Object, e As MouseButtonEventArgs) Handles BtnExit.Click
+    Private Sub BtnExit_Click(sender As Object, e As RoutedEventArgs) Handles BtnExit.Click
         Close()
     End Sub
 
     Private Sub LinkEula_RequestNavigate(sender As Object, e As RequestNavigateEventArgs)
         e.Handled = True
         OpenWebsite(MinecraftEulaUrl)
-    End Sub
-
-    Private Sub Window_MouseLeftButtonDown(sender As Object, e As MouseButtonEventArgs) Handles Me.MouseLeftButtonDown
-        On Error Resume Next
-        DragMove()
     End Sub
 
 End Class

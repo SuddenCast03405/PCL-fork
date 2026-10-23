@@ -132,6 +132,14 @@ RetryCacheCheck:
             End If
             '中国大陆地区的启动确认
             If IsMainlandChina() Then
+                If FrmStart IsNot Nothing Then
+                    Try
+                        FrmStart.Close(New TimeSpan(0, 0, 0, 0))
+                    Catch ex As Exception
+                        Logger.Warn(ex, "关闭启动画面失败")
+                    End Try
+                    FrmStart = Nothing
+                End If
                 Dim ConsentWindow As New MyChinaConsentWindow
                 ConsentWindow.ShowDialog()
                 If Not ConsentWindow.Accepted Then FormMain.EndProgramForce(ProcessReturnValues.Cancel)
