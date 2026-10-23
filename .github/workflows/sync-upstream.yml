@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: write
+  actions: write
 
 concurrency:
   group: sync-upstream
@@ -72,3 +73,10 @@ jobs:
       - name: Push
         if: steps.merge.outputs.changed == 'true'
         run: git push origin HEAD:main
+
+      # 使用 GITHUB_TOKEN 推送不会自动触发 build，需要显式派发
+      - name: Trigger build
+        if: steps.merge.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run build.yml --ref main

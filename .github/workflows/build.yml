@@ -26,12 +26,6 @@ jobs:
         fetch-depth: 1
         submodules: true
 
-    - name: Set Describe
-      shell: bash
-      run: |
-          describe=`git describe --tags --always`
-          echo "describe=$describe" >> $GITHUB_ENV
-
     - name: Setup MSBuild.exe
       uses: microsoft/setup-msbuild@v3
       with:
@@ -65,5 +59,44 @@ jobs:
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v7
       with:
-        name: ${{ matrix.configuration }} ${{ env.describe }}
+        name: ${{ matrix.configuration }}
         path: Plain Craft Launcher 2\obj\${{ matrix.configuration }}\Plain Craft Launcher 2.exe
+
+  publish:
+    name: Publish to Release
+    needs: build
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: windows-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download builds
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Collect executables
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p release
+          cp "artifacts/Release/Plain Craft Launcher 2.exe" "release/PCL2-Fork.exe"
+          cp "artifacts/Debug/Plain Craft Launcher 2.exe" "release/PCL2-Fork-Debug.exe"
+
+      - name: Publish
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: latest
+          name: PCL Fork 最新构建
+          make_latest: true
+          overwrite_files: true
+          files: |
+            release/PCL2-Fork.exe
+            release/PCL2-Fork-Debug.exe
+          body: |
+            由 GitHub Actions 自动构建，提交 `${{ github.sha }}`。
+
+            - `PCL2-Fork.exe`：Release 正式版配置
+            - `PCL2-Fork-Debug.exe`：Debug 配置
+
+            本构建恢复 Minecraft 下载功能，并在中国大陆地区启动前强制确认年龄与 EULA。自动更新功能未包含。
