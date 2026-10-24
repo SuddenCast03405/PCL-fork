@@ -112,6 +112,16 @@ jobs:
           grep -q 'Pcl2Taowa.Join(Code, "Player")' 'Plain Craft Launcher 2/Pages/PageLink/PageLinkMain.xaml.vb'
           grep -q 'ExtractEmbeddedTools' 'Plain Craft Launcher 2/Modules/ModTaowaEasyTier.vb'
           grep -q 'PCL.Taowa.easytier-core.exe' 'Plain Craft Launcher 2/Plain Craft Launcher 2.vbproj'
+          # 许可证与文案
+          grep -q 'GNU GENERAL PUBLIC LICENSE' LICENCE
+          grep -q 'Version 3, 29 June 2007' LICENCE
+          ! grep -rq '改善网络环境' 'Plain Craft Launcher 2' --include='*.vb' --include='*.xaml'
+          grep -q '更换网络环境可能解决问题' 'Plain Craft Launcher 2/Modules/Base/ModNet.vb'
+          # 使用前确认的扩展条款与 EULA 链接
+          grep -q 'CheckLaw' 'Plain Craft Launcher 2/Controls/MyMsg/MyChinaConsentWindow.xaml'
+          grep -q 'CheckNetworkRisk' 'Plain Craft Launcher 2/Controls/MyMsg/MyChinaConsentWindow.xaml'
+          grep -q 'CheckLinkService' 'Plain Craft Launcher 2/Controls/MyMsg/MyChinaConsentWindow.xaml'
+          grep -q 'NavigateUri="https://www.minecraft.net/eula"' 'Plain Craft Launcher 2/Controls/MyMsg/MyChinaConsentWindow.xaml'
 
       - name: Push
         if: steps.merge.outputs.changed == 'true'
