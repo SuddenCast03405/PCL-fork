@@ -67,9 +67,17 @@ jobs:
     needs: build
     if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     runs-on: windows-latest
+    concurrency:
+      group: publish-release
+      cancel-in-progress: false
     permissions:
       contents: write
     steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+
       - name: Download builds
         uses: actions/download-artifact@v4
         with:
@@ -83,20 +91,41 @@ jobs:
           cp "artifacts/Release/Plain Craft Launcher 2.exe" "release/PCL2-Fork.exe"
           cp "artifacts/Debug/Plain Craft Launcher 2.exe" "release/PCL2-Fork-Debug.exe"
 
+      - name: Resolve release version
+        id: release
+        shell: pwsh
+        run: |
+          $content = Get-Content "Plain Craft Launcher 2\Modules\Base\ModBase.vb" -Raw
+          if ($content -notmatch 'VersionBaseName As String = "([^"]+)"') {
+            throw "无法从 ModBase.vb 读取 VersionBaseName"
+          }
+          $version = $Matches[1]
+          "version=$version" >> $env:GITHUB_OUTPUT
+          "tag=v$version" >> $env:GITHUB_OUTPUT
+          Write-Output "Release version: $version"
+
       - name: Publish
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: latest
-          name: PCL Fork 最新构建
+          tag_name: ${{ steps.release.outputs.tag }}
+          name: ${{ steps.release.outputs.version }}
           make_latest: true
           overwrite_files: true
           files: |
             release/PCL2-Fork.exe
             release/PCL2-Fork-Debug.exe
           body: |
-            由 GitHub Actions 自动构建，提交 `${{ github.sha }}`。
+            版本：`${{ steps.release.outputs.version }}`
+            提交：`${{ github.sha }}`
 
             - `PCL2-Fork.exe`：Release 正式版配置
             - `PCL2-Fork-Debug.exe`：Debug 配置
 
-            本构建恢复 Minecraft 下载功能，并在中国大陆地区启动前强制确认年龄与 EULA。自动更新功能未包含。
+            本构建已移植老正式版的可见行为：恢复 Minecraft 下载、主题解锁与调色、百宝箱、回声洞、剪贴板联机、下载校验与 Tooltip 效果，并保留中国大陆地区的启动确认。
+            微软登录与 CurseForge 使用构建仓库配置的 `CLIENT_ID` / `CURSEFORGE_API_KEY`，未内置官方密钥。
+
+      - name: Remove legacy latest release
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release delete latest --yes --cleanup-tag
