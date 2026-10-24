@@ -628,7 +628,7 @@ SkipLogin:
                 GoTo LoginFinish
             Catch ex As Exception
                 Logger.Warn(ex, "验证登录失败")
-                If ex.IsBadNetwork Then Throw New Exception("$登录失败：你的网络环境不佳，导致难以连接到海外服务器。" & vbCrLf & "请稍后再试，或使用加速器、VPN 改善网络环境。")
+                If ex.IsBadNetwork Then Throw New Exception("$登录失败：你的网络环境不佳，导致难以连接到海外服务器。" & vbCrLf & "请稍后再试，或更换网络环境可能解决问题。")
             End Try
             Data.Progress = 0.25
             '尝试刷新登录
@@ -868,7 +868,7 @@ LoginFinish:
                                             " - 只注册了账号，但没有加入对应服务器。")
                 End Select
             ElseIf ex.IsBadNetwork() Then
-                Throw New Exception("$登录失败：你的网络环境不佳，导致难以连接到海外服务器。" & vbCrLf & "请稍后再试，或使用加速器、VPN 改善网络环境。")
+                Throw New Exception("$登录失败：你的网络环境不佳，导致难以连接到海外服务器。" & vbCrLf & "请稍后再试，或更换网络环境可能解决问题。")
             ElseIf ex.Message.StartsWithF("$") Then
                 Throw
             Else
@@ -987,7 +987,7 @@ Retry:
                 End If
                 Throw New OperationCanceledException
             ElseIf ex.Response.Contains("2148916235") Then
-                MyMsgBox($"你的网络所在的国家或地区无法登录微软账号。{vbCrLf}请使用加速器或 VPN，然后再试。", "登录失败", "我知道了")
+                MyMsgBox($"你的网络所在的国家或地区无法登录微软账号。{vbCrLf}请更换网络环境后再试。", "登录失败", "我知道了")
                 Throw New OperationCanceledException
             ElseIf ex.Response.Contains("2148916238") Then
                 If MyMsgBox("该账号年龄不足，你需要先修改出生日期，然后才能登录。" & vbCrLf &
@@ -1027,7 +1027,7 @@ Retry:
                 Throw New Exception("$登录尝试太过频繁，请等待几分钟后再试！")
             ElseIf ex.StatusCode = HttpStatusCode.Forbidden Then
                 Logger.Warn(ex, "微软登录第 4 步汇报 403")
-                Throw New Exception("$当前 IP 的登录尝试异常。" & vbCrLf & "如果你使用了 VPN 或加速器，请把它们关掉或更换节点后再试！")
+                Throw New Exception("$当前 IP 的登录尝试异常。" & vbCrLf & "如果你使用了网络代理或加速器，请把它们关掉或更换节点后再试！")
             ElseIf ex.StatusCode = HttpStatusCode.ServiceUnavailable Then
                 Logger.Warn(ex, "微软登录第 4 步汇报 503")
                 Throw New Exception("$Mojang 服务器出现问题，请稍后再试。" & vbCrLf & "你的网络是正常的，PCL 也是正常的，是 Mojang 出问题了……")

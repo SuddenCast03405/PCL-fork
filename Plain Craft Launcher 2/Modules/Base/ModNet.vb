@@ -280,11 +280,11 @@ Retry:
         Catch ex As HttpRequestException
             Throw
         Catch ex As TimeoutException
-            Throw New WebException($"连接服务器超时，请稍后再试，或使用 VPN 改善网络环境（{Method}, {Url}）", WebExceptionStatus.Timeout)
+            Throw New WebException($"连接服务器超时，请稍后再试，或更换网络环境可能解决问题（{Method}, {Url}）", WebExceptionStatus.Timeout)
         Catch ex As Exception
             If TypeOf ex IsNot TaskCanceledException Then ex.ThrowIfCanceled() 'GetResultWithTimeout 会抛出 TaskCanceledException
             If ex.IsBadNetwork Then
-                Throw New WebException($"网络请求失败，请稍后再试，或使用 VPN 改善网络环境（{Method}, {Url}）", WebExceptionStatus.Timeout)
+                Throw New WebException($"网络请求失败，请稍后再试，或更换网络环境可能解决问题（{Method}, {Url}）", WebExceptionStatus.Timeout)
             Else
                 Throw New Exception($"网络请求出现意外异常（{Method}, {Url}）", ex)
             End If

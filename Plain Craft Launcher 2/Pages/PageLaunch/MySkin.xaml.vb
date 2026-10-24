@@ -300,7 +300,7 @@ Retry:
                             GoTo Retry
                     End Select
                 ElseIf ex.IsBadNetwork Then
-                    Hint("更改披风失败：连接 Mojang 服务器超时，请稍后再试，或使用 VPN 改善网络环境", HintType.Red)
+                    Hint("更改披风失败：连接 Mojang 服务器超时，请稍后再试，或更换网络环境可能解决问题", HintType.Red)
                 Else
                     Logger.Error(ex, "更改披风失败", LogBehavior.Toast)
                 End If
