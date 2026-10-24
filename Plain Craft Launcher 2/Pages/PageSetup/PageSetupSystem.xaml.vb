@@ -99,9 +99,6 @@ Public Class PageSetupSystem
             If e.RemovedItems.Count > 0 Then ComboSystemUpdate.SelectedItem = e.RemovedItems(0)
         End If
     End Sub
-    Private Sub BtnSystemUpdate_Click(sender As Object, e As EventArgs) Handles BtnSystemUpdate.Click
-        UpdateCheckByButton()
-    End Sub
     ''' <summary>
     ''' 启动器是否已经是最新版？
     ''' 若返回 Nothing，则代表无更新缓存文件或出错。

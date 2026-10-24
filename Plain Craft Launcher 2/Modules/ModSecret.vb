@@ -760,12 +760,7 @@ Friend Module ModSecret
                                     Settings.Set(SettingEntry.Key, SettingEntry.Value.ToString)
                                 Next
                             Case "update", "slientupdate"
-                                Dim SilentUpdate = ActionEntry.Name = "slientupdate"
-                                If Not HasUpdatePermission Then
-                                    If Not SilentUpdate Then InputPotatoCode(IsUpdating:=True)
-                                    If Not HasUpdatePermission Then Continue For
-                                End If
-                                UpdateStart(SilentUpdate)
+                                Logger.Warn($"已忽略服务器公告中的启动器更新动作（{ActionEntry.Name}）", LogBehavior.ToastIfDebug)
                             Case Else
                                 Throw New Exception("未知的行动支：" & ActionEntry.Name & ", " & ActionEntry.Value.ToString)
                         End Select

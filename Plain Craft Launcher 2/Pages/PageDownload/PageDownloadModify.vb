@@ -56,7 +56,7 @@ Public Class PageDownloadModify
         Dim Manifest = Configs.McInstallManifest.Get(Task.Input.Config)
         If Manifest IsNot Nothing AndAlso Manifest.SchemaVersion > Versions.McInstallManifestVersion Then
             Logger.Warn($"安装清单由更新版本的 PCL 创建（清单版本：{Manifest.SchemaVersion}，当前版本：{Versions.McInstallManifestVersion}）")
-            Throw New Exception($"更新 PCL 后才能修改它！点击【设置 → 其他 → 检查更新】以更新。")
+            Throw New Exception($"更新 PCL 后才能修改它！请从 PCL-fork 的 GitHub Release 页面下载新版本。")
         End If
         If Manifest IsNot Nothing Then
             Dim LatestManifest = Manifest.RefreshModComponents(Task.Input.PathIndie)
