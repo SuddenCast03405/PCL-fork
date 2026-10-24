@@ -2,24 +2,39 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="使用前确认"
-        Width="480" SizeToContent="Height"
+        Width="600" SizeToContent="Height"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
         Background="#F7F7F7"
         FontFamily="Microsoft YaHei UI" FontSize="13"
         UseLayoutRounding="True" SnapsToDevicePixels="True">
-    <StackPanel Margin="24">
-        <TextBlock Text="使用前确认" FontSize="20" FontWeight="SemiBold" />
-        <TextBlock Margin="0,12,0,0" TextWrapping="Wrap" Foreground="#555555"
-                   Text="本软件为 PCL 的第三方修改版本，与 Mojang Studios 及 PCL 官方无关。&#xa;&#xa;请确认以下两项后继续使用。若不同意，请退出本软件。" />
-        <CheckBox x:Name="CheckAge" Margin="0,20,0,0" Content="我已年满 22 周岁" />
-        <CheckBox x:Name="CheckEula" Margin="0,12,0,0" Content="我已阅读并同意 Minecraft 最终用户许可协议（EULA）" />
-        <TextBlock Margin="24,6,0,0" FontSize="12">
-            <Hyperlink x:Name="LinkEula" RequestNavigate="LinkEula_RequestNavigate">查看 Minecraft EULA</Hyperlink>
-        </TextBlock>
-        <StackPanel Margin="0,24,0,0" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button x:Name="BtnExit" Content="退出 PCL" MinWidth="88" Height="30" Margin="0,0,10,0" IsCancel="True" />
-            <Button x:Name="BtnContinue" Content="同意并继续" MinWidth="96" Height="30" IsDefault="True" IsEnabled="False" />
+    <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="720">
+        <StackPanel Margin="24">
+            <TextBlock Text="使用前确认" FontSize="20" FontWeight="SemiBold" />
+            <TextBlock Margin="0,12,0,0" TextWrapping="Wrap" Foreground="#555555"
+                       Text="本软件为 PCL 的第三方修改版本，与 Mojang Studios 及 PCL 官方无关。&#xa;&#xa;请确认以下各项后继续使用。若不同意，请退出本软件。" />
+            <CheckBox x:Name="CheckAge" Margin="0,20,0,0" Content="我已年满 22 周岁" />
+            <CheckBox x:Name="CheckEula" Margin="0,12,0,0" Content="我已阅读并同意 Minecraft 最终用户许可协议（EULA）" />
+            <TextBlock Margin="24,6,0,0" FontSize="12">
+                <Hyperlink x:Name="LinkEula" NavigateUri="https://www.minecraft.net/eula" Cursor="Hand"
+                           RequestNavigate="LinkEula_RequestNavigate">查看 Minecraft EULA</Hyperlink>
+            </TextBlock>
+            <CheckBox x:Name="CheckLaw" Margin="0,16,0,0" VerticalContentAlignment="Top">
+                <TextBlock TextWrapping="Wrap"
+                           Text="在使用本启动器及参与任何在线活动时，我将严格遵守我所在国家或地区的所有适用法律法规 (包括但不限于网络安全、知识产权及未成年人保护相关法律) ，并对自身的网络行为承担全部法律责任。" />
+            </CheckBox>
+            <CheckBox x:Name="CheckNetworkRisk" Margin="0,12,0,0" VerticalContentAlignment="Top">
+                <TextBlock TextWrapping="Wrap"
+                           Text="我知悉并同意：本启动器涉及的所有网络服务及下载内容 (含游戏、模组及外部链接) 均由第三方提供，相关网络风险由用户自行承担。" />
+            </CheckBox>
+            <CheckBox x:Name="CheckLinkService" Margin="0,12,0,0" VerticalContentAlignment="Top">
+                <TextBlock TextWrapping="Wrap"
+                           Text="我知悉并同意：在线联机服务器均由第三方提供，不受 Mojang Studios、Microsoft 或本启动器开发者的所有、运营及监督。在联机过程中，我可能会接触到未经内容分级或审核的用户生成内容，这些内容可能对部分用户不适宜或具有冒犯性。" />
+            </CheckBox>
+            <StackPanel Margin="0,24,0,0" Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button x:Name="BtnExit" Content="退出 PCL" MinWidth="88" Height="30" Margin="0,0,10,0" IsCancel="True" />
+                <Button x:Name="BtnContinue" Content="同意并继续" MinWidth="96" Height="30" IsDefault="True" IsEnabled="False" />
+            </StackPanel>
         </StackPanel>
-    </StackPanel>
+    </ScrollViewer>
 </Window>

@@ -8,12 +8,14 @@ Public Class MyChinaConsentWindow
         InitializeComponent()
     End Sub
 
-    Private Sub Consent_Changed(sender As Object, e As RoutedEventArgs) Handles CheckAge.Checked, CheckAge.Unchecked, CheckEula.Checked, CheckEula.Unchecked
-        BtnContinue.IsEnabled = CheckAge.IsChecked = True AndAlso CheckEula.IsChecked = True
+    Private Sub Consent_Changed(sender As Object, e As RoutedEventArgs) Handles CheckAge.Checked, CheckAge.Unchecked, CheckEula.Checked, CheckEula.Unchecked, CheckLaw.Checked, CheckLaw.Unchecked, CheckNetworkRisk.Checked, CheckNetworkRisk.Unchecked, CheckLinkService.Checked, CheckLinkService.Unchecked
+        BtnContinue.IsEnabled = CheckAge.IsChecked = True AndAlso CheckEula.IsChecked = True AndAlso
+                                CheckLaw.IsChecked = True AndAlso CheckNetworkRisk.IsChecked = True AndAlso CheckLinkService.IsChecked = True
     End Sub
 
     Private Sub BtnContinue_Click(sender As Object, e As RoutedEventArgs) Handles BtnContinue.Click
-        If CheckAge.IsChecked <> True OrElse CheckEula.IsChecked <> True Then Return
+        If CheckAge.IsChecked <> True OrElse CheckEula.IsChecked <> True OrElse
+           CheckLaw.IsChecked <> True OrElse CheckNetworkRisk.IsChecked <> True OrElse CheckLinkService.IsChecked <> True Then Return
         Accepted = True
         Close()
     End Sub
