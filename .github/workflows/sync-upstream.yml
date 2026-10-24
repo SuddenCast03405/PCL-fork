@@ -102,6 +102,16 @@ jobs:
           # 地区识别必须在后台线程执行
           grep -q 'DetectMainlandByIpCore' 'Plain Craft Launcher 2/Modules/ModChinaConsent.vb'
           grep -q 'Task.Run(Function() DetectMainlandByIpCore())' 'Plain Craft Launcher 2/Modules/ModChinaConsent.vb'
+          # 陶瓦联机后端与内嵌 EasyTier
+          test -f 'Plain Craft Launcher 2/Modules/ModTaowa.vb'
+          test -f 'Plain Craft Launcher 2/Modules/ModTaowaCore.vb'
+          test -f 'Plain Craft Launcher 2/Modules/ModTaowaEasyTier.vb'
+          test -f 'Plain Craft Launcher 2/Modules/ModTaowaInternal.vb'
+          test -f 'Plain Craft Launcher 2/Resources/Taowa/EasyTier/easytier-core.exe'
+          grep -q 'Pcl2Taowa.Host("Player")' 'Plain Craft Launcher 2/Pages/PageLink/PageLinkMain.xaml.vb'
+          grep -q 'Pcl2Taowa.Join(Code, "Player")' 'Plain Craft Launcher 2/Pages/PageLink/PageLinkMain.xaml.vb'
+          grep -q 'ExtractEmbeddedTools' 'Plain Craft Launcher 2/Modules/ModTaowaEasyTier.vb'
+          grep -q 'PCL.Taowa.easytier-core.exe' 'Plain Craft Launcher 2/Plain Craft Launcher 2.vbproj'
 
       - name: Push
         if: steps.merge.outputs.changed == 'true'

@@ -261,6 +261,10 @@
     <Compile Include="Modules\Minecraft\ModWatcher.vb" />
     <Compile Include="Modules\ModSecret.vb" />
     <Compile Include="Modules\ModChinaConsent.vb" />
+    <Compile Include="Modules\ModTaowa.vb" />
+    <Compile Include="Modules\ModTaowaCore.vb" />
+    <Compile Include="Modules\ModTaowaEasyTier.vb" />
+    <Compile Include="Modules\ModTaowaInternal.vb" />
     <Compile Include="Pages\PageDownload\Resource\PageResource.xaml.vb">
       <DependentUpon>PageResource.xaml</DependentUpon>
     </Compile>
@@ -919,6 +923,31 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\lwjgl-unsafe-agent.jar" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Taowa\EasyTier\easytier-core.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>Resources\Taowa\EasyTier\easytier-core.exe</TargetPath>
+    </None>
+    <None Include="Resources\Taowa\EasyTier\easytier-cli.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>Resources\Taowa\EasyTier\easytier-cli.exe</TargetPath>
+    </None>
+    <None Include="Resources\Taowa\EasyTier\Packet.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>Resources\Taowa\EasyTier\Packet.dll</TargetPath>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Taowa\EasyTier\easytier-core.exe">
+      <LogicalName>PCL.Taowa.easytier-core.exe</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Taowa\EasyTier\easytier-cli.exe">
+      <LogicalName>PCL.Taowa.easytier-cli.exe</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Taowa\EasyTier\Packet.dll">
+      <LogicalName>PCL.Taowa.Packet.dll</LogicalName>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MeloongCore\Shared\MeloongCore.csproj">
