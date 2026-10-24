@@ -130,6 +130,12 @@ RetryCacheCheck:
                 MyMsgBox("PCL 和新版 Minecraft 均不再支持 32 位系统，请重装为 64 位系统后再进行游戏！", "环境警告", "我知道了", IsWarn:=True, ForceWait:=True)
                 FormMain.EndProgramForce(ProcessReturnValues.Cancel)
             End If
+            '开源版曾强制隐藏联机入口，升级后恢复一次
+            If Not Settings.Get(Of Boolean)("SystemForkLinkVisibilityMigrated") Then
+                Settings.Set("UiHiddenPageLink", False)
+                Settings.Set("UiHiddenSetupLink", False)
+                Settings.Set("SystemForkLinkVisibilityMigrated", True)
+            End If
             '中国大陆地区的启动确认
             If IsMainlandChina() Then
                 If FrmStart IsNot Nothing Then
