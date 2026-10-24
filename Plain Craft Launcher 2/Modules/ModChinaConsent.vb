@@ -23,6 +23,17 @@ Public Module ModChinaConsent
     End Function
 
     Private Function DetectMainlandByIp() As Boolean?
+        Try
+            Dim DetectTask = Threading.Tasks.Task.Run(Function() DetectMainlandByIpCore())
+            If DetectTask.Wait(6000) Then Return DetectTask.Result
+            Logger.Warn("IP 地理位置识别超时")
+        Catch ex As Exception
+            Logger.Warn(ex.GetBaseException(), "IP 地理位置识别失败")
+        End Try
+        Return Nothing
+    End Function
+
+    Private Function DetectMainlandByIpCore() As Boolean?
         'ipip.net 返回形如“当前 IP：1.2.3.4  来自于：中国 北京  联通”
         Try
             Dim Text As String = NetRequestByClient("https://myip.ipip.net", Timeout:=1500, MakeLog:=False).Trim()
