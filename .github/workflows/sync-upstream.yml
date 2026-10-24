@@ -65,10 +65,31 @@ jobs:
         if: steps.merge.outputs.changed == 'true'
         run: |
           set -euo pipefail
-          grep -q 'RestrictMcDownload As Boolean = False' 'Plain Craft Launcher 2/Modules/ModSecret.vb'
+          secret='Plain Craft Launcher 2/Modules/ModSecret.vb'
+          testpage='Plain Craft Launcher 2/Pages/PageOther/PageOtherTest.xaml.vb'
+          # 下载恢复与正式版分支身份
+          grep -q 'RestrictMcDownload As Boolean = False' "$secret"
+          grep -q 'VersionBranchMain As String = "Official"' "$secret"
+          grep -q 'RegFolder As String = "PCL"' "$secret"
+          # 本地主题解锁与调色
+          grep -q 'LocalUnlockedThemeIds' "$secret"
+          grep -q 'SyncLocalUnlockedThemes' "$secret"
+          # 中国大陆启动确认
           test -f 'Plain Craft Launcher 2/Modules/ModChinaConsent.vb'
           test -f 'Plain Craft Launcher 2/Controls/MyMsg/MyChinaConsentWindow.xaml'
+          test -f 'Plain Craft Launcher 2/Controls/MyMsg/MyChinaConsentWindow.xaml.vb'
           grep -q 'IsMainlandChina()' 'Plain Craft Launcher 2/Application.xaml.vb'
+          # Tooltip 样式与滚动淡出
+          grep -q 'TooltipLoaded' 'Plain Craft Launcher 2/Application.xaml'
+          grep -q 'ShowingTooltips' 'Plain Craft Launcher 2/Application.xaml.vb'
+          grep -q 'ShowingTooltips' 'Plain Craft Launcher 2/Controls/MyScrollViewer.vb'
+          # 百宝箱
+          grep -q 'BtnCave_Click' "$testpage"
+          grep -q 'IsCaveEnabled' "$testpage"
+          # 剪贴板联机：占位 Return 必须已被删除
+          ! grep -q "TODO: 联机复活赛" 'Plain Craft Launcher 2/FormMain.xaml.vb'
+          # 联机配置联网不再被开源版判断拦截
+          ! grep -q 'VersionBranchMain <> "Official"' 'Plain Craft Launcher 2/Pages/PageLink/PageLinkMain.xaml.vb'
 
       - name: Push
         if: steps.merge.outputs.changed == 'true'
