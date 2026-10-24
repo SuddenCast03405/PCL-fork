@@ -90,6 +90,18 @@ jobs:
           ! grep -q "TODO: 联机复活赛" 'Plain Craft Launcher 2/FormMain.xaml.vb'
           # 联机配置联网不再被开源版判断拦截
           ! grep -q 'VersionBranchMain <> "Official"' 'Plain Craft Launcher 2/Pages/PageLink/PageLinkMain.xaml.vb'
+          # 联机入口不得被强制隐藏
+          ! grep -q 'ForcedSettings' 'Plain Craft Launcher 2/Pages/PageSetup/Settings.vb'
+          grep -q 'SystemForkLinkVisibilityMigrated' 'Plain Craft Launcher 2/Application.xaml.vb'
+          ! grep -q "BtnTitleSelect2.Visibility = Visibility.Collapsed" 'Plain Craft Launcher 2/Pages/PageSetup/PageSetupUI.xaml.vb'
+          ! grep -q "ItemLink.Visibility = Visibility.Collapsed" 'Plain Craft Launcher 2/Pages/PageSetup/PageSetupUI.xaml.vb'
+          # 检查更新入口必须保持移除
+          ! grep -q 'BtnAboutUpdate' 'Plain Craft Launcher 2/Pages/PageOther/PageOtherAbout.xaml'
+          ! grep -q 'BtnSystemUpdate' 'Plain Craft Launcher 2/Pages/PageSetup/PageSetupSystem.xaml'
+          ! grep -q 'EventType.检查更新' 'Plain Craft Launcher 2/Modules/ModEvent.vb'
+          # 地区识别必须在后台线程执行
+          grep -q 'DetectMainlandByIpCore' 'Plain Craft Launcher 2/Modules/ModChinaConsent.vb'
+          grep -q 'Task.Run(Function() DetectMainlandByIpCore())' 'Plain Craft Launcher 2/Modules/ModChinaConsent.vb'
 
       - name: Push
         if: steps.merge.outputs.changed == 'true'
