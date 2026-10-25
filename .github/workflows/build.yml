@@ -76,7 +76,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
         with:
-          fetch-depth: 1
+          fetch-depth: 0
 
       - name: Download builds
         uses: actions/download-artifact@v4
@@ -95,33 +95,69 @@ jobs:
         id: release
         shell: pwsh
         run: |
-          $content = Get-Content "Plain Craft Launcher 2\Modules\Base\ModBase.vb" -Raw
-          if ($content -notmatch 'VersionBaseName As String = "([^"]+)"') {
+          $base = Get-Content "Plain Craft Launcher 2\Modules\Base\ModBase.vb" -Raw
+          if ($base -notmatch 'VersionBaseName As String = "([^"]+)"') {
             throw "无法从 ModBase.vb 读取 VersionBaseName"
           }
           $version = $Matches[1]
-          "version=$version" >> $env:GITHUB_OUTPUT
-          "tag=v$version" >> $env:GITHUB_OUTPUT
-          Write-Output "Release version: $version"
+          if ($base -notmatch 'VersionCode As Integer = (\d+)') {
+            throw "无法从 ModBase.vb 读取 VersionCode"
+          }
+          $versionCode = [int]$Matches[1]
+          $rev = (& git rev-list --count HEAD).Trim()
+          $tag = "v$version-fork.$rev"
+          $name = "$version-fork.$rev"
+
+          # 从官方源码中提取当前版本的更新日志
+          $changelog = @()
+          $form = Get-Content "Plain Craft Launcher 2\FormMain.xaml.vb" -Raw
+          $block = [regex]::Match($form, "(?s)If LastVersion < $versionCode Then(.*?)(?=\r?\n\s*If LastVersion <|\r?\n\s*'整理更新日志)")
+          if ($block.Success) {
+            foreach ($line in ($block.Groups[1].Value -split "\r?\n")) {
+              $entry = [regex]::Match($line, '^\s*FeatureList\.Add\(New KeyValuePair\(Of Integer, String\)\(\d+, "([^"]+)"\)\)')
+              if ($entry.Success -and $entry.Groups[1].Value -notmatch '联机') {
+                $changelog += "- " + $entry.Groups[1].Value
+              }
+            }
+          }
+
+          $body = @(
+            "版本：``$version``",
+            "提交：``$env:GITHUB_SHA``",
+            "Fork 修订号：``$rev``",
+            "",
+            "- ``PCL2-Fork.exe``：Release 正式版配置",
+            "- ``PCL2-Fork-Debug.exe``：Debug 配置"
+          )
+          if ($changelog.Count -gt 0) {
+            $body += @("", "## 官方更新日志（$version）", "") + $changelog
+          }
+          $body += @("", "微软登录与 CurseForge 使用构建仓库配置的 ``CLIENT_ID`` / ``CURSEFORGE_API_KEY``，未内置官方密钥。")
+
+          foreach ($pair in @(
+            @("version", $version),
+            @("rev", $rev),
+            @("tag", $tag),
+            @("name", $name),
+            @("body", ($body -join "`n"))
+          )) {
+            Add-Content -Path $env:GITHUB_OUTPUT -Value ($pair[0] + "<<" + "PCL_OUTPUT_EOF") -Encoding utf8
+            Add-Content -Path $env:GITHUB_OUTPUT -Value $pair[1] -Encoding utf8
+            Add-Content -Path $env:GITHUB_OUTPUT -Value "PCL_OUTPUT_EOF" -Encoding utf8
+          }
+          Write-Output "Release version: $name"
 
       - name: Publish
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.release.outputs.tag }}
-          name: ${{ steps.release.outputs.version }}
+          name: ${{ steps.release.outputs.name }}
           make_latest: true
           overwrite_files: true
           files: |
             release/PCL2-Fork.exe
             release/PCL2-Fork-Debug.exe
-          body: |
-            版本：`${{ steps.release.outputs.version }}`
-            提交：`${{ github.sha }}`
-
-            - `PCL2-Fork.exe`：Release 正式版配置
-            - `PCL2-Fork-Debug.exe`：Debug 配置
-
-            微软登录与 CurseForge 使用构建仓库配置的 `CLIENT_ID` / `CURSEFORGE_API_KEY`，未内置官方密钥。
+          body: ${{ steps.release.outputs.body }}
 
       - name: Remove legacy latest release
         continue-on-error: true
