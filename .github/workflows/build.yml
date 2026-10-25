@@ -122,7 +122,7 @@ jobs:
             - `PCL2-Fork-Debug.exe`：Debug 配置
 
             本构建已移植老正式版的可见行为：恢复 Minecraft 下载、主题解锁与调色、百宝箱、回声洞、剪贴板联机、下载校验与 Tooltip 效果，并保留中国大陆地区的启动确认。
-            联机功能已接入 OpenPCL 的陶瓦联机后端，EasyTier 内嵌在启动器中，无需额外下载。
+            联机功能已接入 OpenPCL 的陶瓦联机后端，EasyTier 内嵌在启动器中，无需额外下载。需在可执行文件目录的 `PCL\Setup.ini` 中加入 `EasyTier=true` 后才会显示联机入口。
             微软登录与 CurseForge 使用构建仓库配置的 `CLIENT_ID` / `CURSEFORGE_API_KEY`，未内置官方密钥。
 
       - name: Remove legacy latest release

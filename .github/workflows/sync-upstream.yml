@@ -122,6 +122,13 @@ jobs:
           grep -q 'CheckNetworkRisk' 'Plain Craft Launcher 2/Controls/MyMsg/MyChinaConsentWindow.xaml'
           grep -q 'CheckLinkService' 'Plain Craft Launcher 2/Controls/MyMsg/MyChinaConsentWindow.xaml'
           grep -q 'NavigateUri="https://www.minecraft.net/eula"' 'Plain Craft Launcher 2/Controls/MyMsg/MyChinaConsentWindow.xaml'
+          # 联机开关与每次进入的免责声明
+          test -f 'Plain Craft Launcher 2/Modules/ModLinkGate.vb'
+          grep -q 'EasyTier' 'Plain Craft Launcher 2/Modules/ModLinkGate.vb'
+          grep -q 'IsEasyTierEnabled' 'Plain Craft Launcher 2/Pages/PageSetup/PageSetupUI.xaml.vb'
+          test -f 'Plain Craft Launcher 2/Controls/MyMsg/MyLinkDisclaimerWindow.xaml'
+          grep -q 'ConfirmDisclaimerOnEnter' 'Plain Craft Launcher 2/Pages/PageLink/PageLinkMain.xaml.vb'
+          grep -q 'CheckChangeRight' 'Plain Craft Launcher 2/Controls/MyMsg/MyLinkDisclaimerWindow.xaml'
 
       - name: Push
         if: steps.merge.outputs.changed == 'true'
