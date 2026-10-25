@@ -241,6 +241,9 @@
     <Compile Include="Controls\MyMsg\MyChinaConsentWindow.xaml.vb">
       <DependentUpon>MyChinaConsentWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\MyMsg\MyLinkDisclaimerWindow.xaml.vb">
+      <DependentUpon>MyLinkDisclaimerWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\MyMsg\MyMsgInput.xaml.vb">
       <DependentUpon>MyMsgInput.xaml</DependentUpon>
     </Compile>
@@ -261,6 +264,7 @@
     <Compile Include="Modules\Minecraft\ModWatcher.vb" />
     <Compile Include="Modules\ModSecret.vb" />
     <Compile Include="Modules\ModChinaConsent.vb" />
+    <Compile Include="Modules\ModLinkGate.vb" />
     <Compile Include="Modules\ModTaowa.vb" />
     <Compile Include="Modules\ModTaowaCore.vb" />
     <Compile Include="Modules\ModTaowaEasyTier.vb" />
@@ -435,6 +439,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\MyMsg\MyChinaConsentWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\MyMsg\MyLinkDisclaimerWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

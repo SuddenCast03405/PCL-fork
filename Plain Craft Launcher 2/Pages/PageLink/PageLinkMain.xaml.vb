@@ -66,6 +66,26 @@ Public Class PageLinkMain
         FrmLinkMain.PanFinish.Visibility = If(LinkState = LinkStates.Finished, Visibility.Visible, Visibility.Collapsed)
     End Sub
 
+    '每次进入联机功能时确认特别声明与免责条款
+    Private Shared DisclaimerShowing As Boolean = False
+    Private Sub ConfirmDisclaimerOnEnter() Handles Me.PageEnter
+        If LinkState <> LinkStates.Waiting OrElse DisclaimerShowing Then Return
+        If Not ModLinkGate.IsEasyTierEnabled() Then
+            Hint("内置联机功能未启用", HintType.Red)
+            RunInUi(Sub() FrmMain.PageChange(FormMain.PageType.Launch))
+            Return
+        End If
+        DisclaimerShowing = True
+        RunInUi(
+        Sub()
+            Try
+                If Not ModLinkGate.ConfirmDisclaimer() Then FrmMain.PageChange(FormMain.PageType.Launch)
+            Finally
+                DisclaimerShowing = False
+            End Try
+        End Sub, ForceWaitUntilLoaded:=True)
+    End Sub
+
 #End Region
 
 #Region "初始页面 (Waiting)"
@@ -191,6 +211,11 @@ Public Class PageLinkMain
     ''' 切换到联机页并立即加入指定房间。
     ''' </summary>
     Public Shared Sub Join(Code As String)
+        If Not ModLinkGate.IsEasyTierEnabled() Then
+            Hint("内置联机功能未启用", HintType.Red)
+            Return
+        End If
+        If Not ModLinkGate.ConfirmDisclaimer() Then Return
         Pcl2Taowa.Join(Code, "Player")
         Return
 
