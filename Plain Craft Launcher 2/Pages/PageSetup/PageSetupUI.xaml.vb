@@ -444,7 +444,7 @@ Refresh:
     Public Shared Sub HiddenRefresh() Handles Me.Loaded
         If FrmMain.PanTitleSelect Is Nothing OrElse Not FrmMain.PanTitleSelect.IsLoaded Then Return
         Try
-            '联机功能仅在 Setup.ini 中开启 EasyTier 后可见
+            '联机功能仅在 Setup.ini 打开对应开关后可见
             Dim LinkAvailable As Boolean = ModLinkGate.IsEasyTierEnabled()
             Dim PageLinkHidden As Boolean = Not LinkAvailable OrElse Settings.Get(Of Boolean)("UiHiddenPageLink")
             Dim SetupLinkHidden As Boolean = Not LinkAvailable OrElse Settings.Get(Of Boolean)("UiHiddenSetupLink")

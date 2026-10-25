@@ -4,7 +4,7 @@
 Public Module ModLinkGate
 
     ''' <summary>
-    ''' 仅当可执行文件目录的 PCL\Setup.ini 中存在 EasyTier=true 时启用联机功能。
+    ''' 仅当可执行文件目录的 PCL\Setup.ini 打开了对应开关时启用联机功能。
     ''' </summary>
     Public Function IsEasyTierEnabled() As Boolean
         Try
