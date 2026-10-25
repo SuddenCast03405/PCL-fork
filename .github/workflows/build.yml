@@ -121,7 +121,6 @@ jobs:
             - `PCL2-Fork.exe`：Release 正式版配置
             - `PCL2-Fork-Debug.exe`：Debug 配置
 
-            本构建已移植老正式版的可见行为：恢复 Minecraft 下载、主题解锁与调色、百宝箱、回声洞、下载校验与 Tooltip 效果，并保留中国大陆地区的启动确认。
             微软登录与 CurseForge 使用构建仓库配置的 `CLIENT_ID` / `CURSEFORGE_API_KEY`，未内置官方密钥。
 
       - name: Remove legacy latest release
